@@ -25,7 +25,7 @@ jobs:
           images: ghcr.io/shiftclack/lua-wow
           tags: |
             type=raw,value=latest
-            type=ref,event=tag
+            type=semver,pattern={{version}}
 
       - name: set up qemu
         uses: docker/setup-qemu-action@v4
@@ -40,7 +40,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ github.token }}
 
       - name: build and publish image
         uses: docker/build-push-action@v7
@@ -49,5 +49,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           provenance: mode=max
           sbom: true
