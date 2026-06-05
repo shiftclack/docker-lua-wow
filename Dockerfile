@@ -27,14 +27,14 @@ LABEL org.opencontainers.image.description="WoW Lua 5.1 test environment"
 LABEL org.opencontainers.image.licenses="MIT"
 LABEL org.opencontainers.image.source="https://github.com/shiftclack/docker-lua-wow"
 
-COPY --chown=root --from=builder /usr/local/bin/busted /usr/local/bin/busted
-COPY --chown=root --from=builder /usr/local/bin/luacov /usr/local/bin/luacov
-COPY --chown=root --from=builder /usr/local/bin/luasrcdiet /usr/local/bin/luasrcdiet
-COPY --chown=root --from=builder /usr/local/lib/lua/5.1 /usr/local/lib/lua/5.1
-COPY --chown=root --from=builder /usr/local/lib/luarocks /usr/local/lib/luarocks
-COPY --chown=root --from=builder /usr/local/share/lua/5.1 /usr/local/share/lua/5.1
-COPY --chown=root --from=builder /usr/local/lua-language-server /usr/local/lua-language-server
-COPY --chown=root --chmod=0755 ./wrapper.sh /usr/local/bin/lua-language-server
+COPY --from=builder /usr/local/bin/busted /usr/local/bin/busted
+COPY --from=builder /usr/local/bin/luacov /usr/local/bin/luacov
+COPY --from=builder /usr/local/bin/luasrcdiet /usr/local/bin/luasrcdiet
+COPY --from=builder /usr/local/lib/lua/5.1 /usr/local/lib/lua/5.1
+COPY --from=builder /usr/local/lib/luarocks /usr/local/lib/luarocks
+COPY --from=builder /usr/local/share/lua/5.1 /usr/local/share/lua/5.1
+COPY --from=builder /usr/local/lua-language-server /usr/local/lua-language-server
+COPY --chmod=0755 ./wrapper.sh /usr/local/bin/lua-language-server
 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
