@@ -38,6 +38,7 @@ COPY --chmod=0755 ./wrapper.sh /usr/local/bin/lua-language-server
 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
+        gh \
         lua-check \
         lua5.1 \
         make \
