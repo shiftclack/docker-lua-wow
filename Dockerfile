@@ -34,8 +34,6 @@ COPY --from=builder /usr/local/lib/lua/5.1 /usr/local/lib/lua/5.1
 COPY --from=builder /usr/local/lib/luarocks /usr/local/lib/luarocks
 COPY --from=builder /usr/local/share/lua/5.1 /usr/local/share/lua/5.1
 COPY --from=builder /usr/local/lua-language-server /usr/local/lua-language-server
-COPY --chmod=0755 ./lua-language-server.sh /usr/local/bin/lua-language-server
-COPY --chmod=0755 ./release-upload.sh /usr/local/bin/release-upload.sh
 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
@@ -51,6 +49,9 @@ RUN apt-get update && \
     useradd --home-dir /lua --create-home --system --shell /bin/bash lua && \
     mkdir /usr/local/lua-language-server/log && \
     chmod 777 /usr/local/lua-language-server/log
+
+COPY --chmod=0755 ./lua-language-server.sh /usr/local/bin/lua-language-server
+COPY --chmod=0755 ./release-upload.sh /usr/local/bin/release-upload.sh
 
 WORKDIR /lua
 ENV PATH=${PATH}:/usr/local/lua-language-server/bin
