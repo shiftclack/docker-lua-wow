@@ -34,12 +34,13 @@ COPY --from=builder /usr/local/lib/lua/5.1 /usr/local/lib/lua/5.1
 COPY --from=builder /usr/local/lib/luarocks /usr/local/lib/luarocks
 COPY --from=builder /usr/local/share/lua/5.1 /usr/local/share/lua/5.1
 COPY --from=builder /usr/local/lua-language-server /usr/local/lua-language-server
-COPY --chmod=0755 ./wrapper.sh /usr/local/bin/lua-language-server
+COPY --chmod=0755 ./lua-language-server.sh /usr/local/bin/lua-language-server
+COPY --chmod=0755 ./release-upload.sh /usr/local/bin/release-upload.sh
 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \
-        gh \
-        git \
+        ca-certificates \
+        curl \
         lua-check \
         lua5.1 \
         make \
