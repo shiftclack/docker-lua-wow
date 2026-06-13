@@ -1,12 +1,13 @@
 #!/bin/bash
 #
-# Syntax: release-upload.sh ${{ github.repository }} ${{ github.event.release.tag_name }} dist/file.zip
+# Syntax: release-upload.sh ${{ github.repository }} ${{ github.event.release.tag_name }} "file-v123.zip" dist/file.zip
 #
 set -ex
 
 REPOSITORY="$1"
 TAG="$2"
-ASSET="$3"
+NAME="$3"
+ASSET="$4"
 
 release_json="$(
 curl -fsSL \
@@ -20,7 +21,7 @@ upload_url="$(
     | sed -n 's/.*"upload_url": *"\([^"]*\){?name,label}".*/\1/p'
 )"
 
-curl -vv -fsSL \
+curl -v -fsSL \
     -X POST \
     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
     -H "Accept: application/vnd.github+json" \
