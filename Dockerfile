@@ -26,6 +26,7 @@ RUN mkdir /usr/local/lua-language-server && \
 # we can `strip` the binary to save 2 MB
 ARG STYLUA_VERSION=2.5.2
 RUN STYLUA_ARCH=$(echo ${TARGETARCH} | sed 's/^amd64/x86_64/') && \
+    STYLUA_ARCH=$(echo ${STYLUA_ARCH} | sed 's/^arm64/aarch64/') && \
     wget https://github.com/JohnnyMorganz/StyLua/releases/download/v${STYLUA_VERSION}/stylua-${TARGETOS}-${STYLUA_ARCH}.zip -O stylua.zip && \
     unzip stylua.zip && \
     strip stylua
