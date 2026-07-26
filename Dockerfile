@@ -2,6 +2,7 @@ FROM debian:trixie-slim AS builder
 
 RUN apt-get update && \
     apt-get install -y \
+        binutils \
         build-essential \
         lua5.1 \
         luarocks \
@@ -16,11 +17,17 @@ ARG TARGETOS
 ARG TARGETARCH
 RUN mkdir /usr/local/lua-language-server && \
     cd /usr/local/lua-language-server && \
-    REAL_ARCH=$(echo ${TARGETARCH} | sed 's/^amd64/x64/') && \
-    wget "https://github.com/LuaLS/lua-language-server/releases/download/${LUA_LANGUAGE_SERVER_VERSION}/lua-language-server-${LUA_LANGUAGE_SERVER_VERSION}-${TARGETOS}-${REAL_ARCH}.tar.gz" -O lua-language-server.tar.gz && \
+    LUALS_ARCH=$(echo ${TARGETARCH} | sed 's/^amd64/x64/') && \
+    wget "https://github.com/LuaLS/lua-language-server/releases/download/${LUA_LANGUAGE_SERVER_VERSION}/lua-language-server-${LUA_LANGUAGE_SERVER_VERSION}-${TARGETOS}-${LUALS_ARCH}.tar.gz" -O lua-language-server.tar.gz && \
     tar xzvf lua-language-server.tar.gz && \
-    rm -f lua-language-server.tar.gz && \
     ln -s /usr/local/lua-language-server/bin/lua-language-server /usr/local/bin/lua-language-server
+
+# we can `strip` the binary to save 2 MB
+ARG STYLUA_VERSION=2.5.2
+RUN STYLUA_ARCH=$(echo ${TARGETARCH} | sed 's/^amd64/x86_64/') && \
+    wget https://github.com/JohnnyMorganz/StyLua/releases/download/v${STYLUA_VERSION}/stylua-${TARGETOS}-${STYLUA_ARCH}.zip -O stylua.zip && \
+    unzip stylua.zip && \
+    strip stylua
 
 FROM debian:trixie-slim
 LABEL org.opencontainers.image.description="WoW Lua 5.1 test environment"
@@ -34,6 +41,7 @@ COPY --from=builder /usr/local/lib/lua/5.1 /usr/local/lib/lua/5.1
 COPY --from=builder /usr/local/lib/luarocks /usr/local/lib/luarocks
 COPY --from=builder /usr/local/share/lua/5.1 /usr/local/share/lua/5.1
 COPY --from=builder /usr/local/lua-language-server /usr/local/lua-language-server
+COPY --from=builder /stylua /usr/local/bin/stylua
 
 RUN apt-get update && \
     apt-get install --no-install-recommends -y \

@@ -17,6 +17,7 @@ This repo builds a small docker image for running tests in a World of Warcraft c
 * [luacov](https://lunarmodules.github.io/luacov/)
 * [luasrcdiet](https://github.com/jirutka/luasrcdiet)
 * [lua-language-server](https://github.com/LuaLS/lua-language-server)
+* [stylua](https://github.com/JohnnyMorganz/StyLua)
 * `make`
 
 ## Usage
