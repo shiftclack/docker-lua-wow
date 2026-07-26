@@ -20,6 +20,7 @@ RUN mkdir /usr/local/lua-language-server && \
     LUALS_ARCH=$(echo ${TARGETARCH} | sed 's/^amd64/x64/') && \
     wget "https://github.com/LuaLS/lua-language-server/releases/download/${LUA_LANGUAGE_SERVER_VERSION}/lua-language-server-${LUA_LANGUAGE_SERVER_VERSION}-${TARGETOS}-${LUALS_ARCH}.tar.gz" -O lua-language-server.tar.gz && \
     tar xzvf lua-language-server.tar.gz && \
+    rm -f lua-language-server.tar.gz && \
     ln -s /usr/local/lua-language-server/bin/lua-language-server /usr/local/bin/lua-language-server
 
 # we can `strip` the binary to save 2 MB
